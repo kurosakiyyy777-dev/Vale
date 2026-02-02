@@ -6,9 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -21,7 +19,7 @@ body {
     overflow: hidden;
 }
 
-/* 💕 Background Heart Rain */
+/* 💕 Background heart rain */
 .heart {
     position: fixed;
     top: -10px;
@@ -30,10 +28,7 @@ body {
     pointer-events: none;
 }
 @keyframes fall {
-    to {
-        transform: translateY(110vh);
-        opacity: 0;
-    }
+    to { transform: translateY(110vh); opacity: 0; }
 }
 
 /* Card */
@@ -48,7 +43,15 @@ body {
     z-index: 2;
 }
 
-/* Head text */
+/* GIF styling */
+.gif {
+    width: 180px;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto 14px;
+}
+
+/* Header */
 h1 {
     color: #e6005c;
     margin: 10px 0 18px;
@@ -61,7 +64,6 @@ h1 {
     position: relative;
     height: 130px;
 }
-
 button {
     padding: 14px 38px;
     font-size: 18px;
@@ -71,17 +73,13 @@ button {
     font-weight: 600;
     transition: transform .15s ease, box-shadow .15s ease;
 }
-
-button:active {
-    transform: scale(0.96);
-}
+button:active { transform: scale(0.96); }
 
 #yes {
     background: linear-gradient(135deg, #ff3366, #ff5f8f);
     color: #fff;
-    box-shadow: 0 6px 18px rgba(255, 51, 102, 0.4);
+    box-shadow: 0 6px 18px rgba(255,51,102,0.4);
 }
-
 #no {
     background: #aaa;
     color: #fff;
@@ -116,21 +114,13 @@ button:active {
 
 <div class="container">
 
-    <!-- 🐻‍❄️ Opening Bubu Dudu GIF -->
-    <div style="margin-bottom: 12px;">
-        <div class="tenor-gif-embed"
-             data-postid="13568168152637162138"
-             data-share-method="host"
-             data-aspect-ratio="1"
-             data-width="100%">
-            <a href="https://tenor.com/view/bubu-dudu-sseeyall-gif-13568168152637162138">
-                Bubu Dudu Sseeyall Sticker
-            </a>
-            from <a href="https://tenor.com/search/bubu+dudu-stickers">
-                Bubu Dudu Stickers
-            </a>
-        </div>
-    </div>
+    <!-- Opening GIF -->
+    <img
+        id="openingGif"
+        class="gif"
+        src="https://fetchpik.com/images/fetchpik.com-kWIhGE17Lo.gif"
+        alt="Cute opening animation"
+    >
 
     <h1>Will you be my Valentine Kitty Cheeja? !! 💘</h1>
 
@@ -141,56 +131,53 @@ button:active {
 
     <div class="message" id="msg"></div>
 
-    <!-- 💖 Tenor GIF after YES -->
-    <div id="tenorGif" style="display:none; margin-top:20px;">
-        <div class="tenor-gif-embed"
-             data-postid="14493167788598386806"
-             data-share-method="host"
-             data-aspect-ratio="1"
-             data-width="100%">
-            <a href="https://tenor.com/view/dudu-bubu-peachugomu-gif-gif-14493167788598386806">
-                Dudu Bubu Sticker
-            </a>
-            from <a href="https://tenor.com/search/dudu-stickers">
-                Dudu Stickers
-            </a>
-        </div>
-    </div>
+    <!-- Final GIF (hidden initially) -->
+    <img
+        id="finalGif"
+        class="gif"
+        src="https://fetchpik.com/images/fetchpik.com-Tq3ah5Ypkw.gif"
+        alt="Cute final animation"
+        style="display:none;"
+    >
 
 </div>
-
-<!-- Tenor embed -->
-<script async src="https://tenor.com/embed.js"></script>
 
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const msg = document.getElementById("msg");
-const tenorGif = document.getElementById("tenorGif");
+const openingGif = document.getElementById("openingGif");
+const finalGif = document.getElementById("finalGif");
 
 /* Move NO button */
 function moveNo() {
     const box = document.querySelector(".buttons");
-    const maxX = box.clientWidth - noBtn.offsetWidth;
-    const maxY = box.clientHeight - noBtn.offsetHeight;
-
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    noBtn.style.left = Math.random() * (box.clientWidth - noBtn.offsetWidth) + "px";
+    noBtn.style.top  = Math.random() * (box.clientHeight - noBtn.offsetHeight) + "px";
 }
 moveNo();
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
 /* YES click */
-yesBtn.addEventListener("click", () => {
-    msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
+yesBtn.onclick = () => {
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
-    tenorGif.style.display = "block";
-    heartBurst();
-});
+    msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
 
-/* 💕 Background hearts */
+    // 💥 heart burst FIRST
+    heartBurst();
+
+    // remove opening gif
+    openingGif.remove();
+
+    // show final gif after burst
+    setTimeout(() => {
+        finalGif.style.display = "block";
+    }, 700);
+};
+
+/* 💕 background hearts */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -201,7 +188,7 @@ setInterval(() => {
     setTimeout(() => h.remove(), 6000);
 }, 350);
 
-/* 🩷 Heart burst */
+/* 🩷 heart burst */
 function heartBurst() {
     for (let i = 0; i < 30; i++) {
         const b = document.createElement("div");
