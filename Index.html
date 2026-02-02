@@ -6,110 +6,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Segoe UI", sans-serif;
-    overflow: hidden;
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:"Segoe UI",sans-serif;
+    overflow:hidden;
 }
 
-/* 💕 Background heart rain */
-.heart {
-    position: fixed;
-    top: -10px;
-    font-size: 22px;
-    animation: fall linear infinite;
-    pointer-events: none;
+/* 💕 Heart rain */
+.heart{
+    position:fixed;
+    top:-10px;
+    font-size:22px;
+    animation:fall linear infinite;
+    pointer-events:none;
 }
-@keyframes fall {
-    to { transform: translateY(110vh); opacity: 0; }
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0}
 }
 
 /* Card */
-.container {
-    background: #fff;
-    padding: 28px;
-    border-radius: 26px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-    text-align: center;
-    width: 90%;
-    max-width: 420px;
-    min-height: 520px;
-    position: relative;
+.container{
+    background:#fff;
+    padding:28px;
+    border-radius:26px;
+    box-shadow:0 18px 40px rgba(0,0,0,.25);
+    text-align:center;
+    width:90%;
+    max-width:420px;
+    min-height:520px;
+    position:relative;
 }
 
 /* GIFs */
-.gif {
-    width: 180px;
-    display: block;
-    margin: 0 auto 16px;
+.gif{
+    width:180px;
+    display:block;
+    margin:0 auto 16px;
+}
+.final-gif{
+    width:300px;
+    display:none;
+    margin:0 auto;
 }
 
-.final-gif {
-    width: 280px;
-    margin: 0 auto;
-    display: none;
-}
-
-/* Question */
-h1 {
-    color: #e6005c;
-    margin: 10px 0 18px;
-    font-size: 24px;
+/* Text */
+h1{
+    color:#e6005c;
+    margin:10px 0 18px;
+    font-size:24px;
 }
 
 /* Buttons */
-.buttons {
-    margin-top: 20px;
-    position: relative;
-    height: 130px;
+.buttons{
+    margin-top:20px;
+    position:relative;
+    height:130px;
 }
-button {
-    padding: 14px 38px;
-    font-size: 18px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
+button{
+    padding:14px 38px;
+    font-size:18px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
 }
-#yes {
-    background: linear-gradient(135deg, #ff3366, #ff5f8f);
-    color: #fff;
+#yes{
+    background:linear-gradient(135deg,#ff3366,#ff5f8f);
+    color:#fff;
 }
-#no {
-    background: #aaa;
-    color: #fff;
-    position: absolute;
+#no{
+    background:#aaa;
+    color:#fff;
+    position:absolute;
 }
 
 /* Bottom message */
-.message {
-    position: absolute;
-    bottom: 18px;
-    left: 0;
-    right: 0;
-    font-size: 22px;
-    color: #e6005c;
-    font-weight: bold;
+.message{
+    position:absolute;
+    bottom:18px;
+    left:0;
+    right:0;
+    font-size:22px;
+    color:#e6005c;
+    font-weight:bold;
 }
 
 /* 🩷 Heart burst */
-.burst {
-    position: fixed;
-    font-size: 26px;
-    animation: burst 1s ease-out forwards;
-    pointer-events: none;
+.burst{
+    position:fixed;
+    font-size:26px;
+    animation:burst 1s ease-out forwards;
+    pointer-events:none;
 }
-@keyframes burst {
-    to {
-        transform: translate(var(--x), var(--y)) scale(0.5);
-        opacity: 0;
+@keyframes burst{
+    to{
+        transform:translate(var(--x),var(--y)) scale(.5);
+        opacity:0;
     }
 }
 </style>
@@ -117,8 +116,13 @@ button {
 
 <body>
 
-<!-- 🎵 Audio -->
-<audio id="bgMusic" src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3" preload="auto"></audio>
+<!-- 🎵 Audio (local file, loops forever) -->
+<audio
+    id="bgMusic"
+    src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3"
+    preload="auto"
+    loop>
+</audio>
 
 <div class="container">
 
@@ -137,7 +141,7 @@ button {
     <!-- Final GIF -->
     <img id="finalGif" class="final-gif" src="dudu-bubu.gif" alt="Final">
 
-    <!-- Message -->
+    <!-- Bottom message -->
     <div class="message" id="msg"></div>
 
 </div>
@@ -152,43 +156,39 @@ const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 const music = document.getElementById("bgMusic");
 
-/* ▶️ Play music on first interaction */
-function playMusic() {
-    music.volume = 0.7;
-    music.play();
-    document.removeEventListener("click", playMusic);
-    document.removeEventListener("touchstart", playMusic);
-}
-document.addEventListener("click", playMusic);
-document.addEventListener("touchstart", playMusic);
-
 /* Move NO button */
-function moveNo() {
-    const box = buttons;
-    noBtn.style.left = Math.random() * (box.clientWidth - noBtn.offsetWidth) + "px";
-    noBtn.style.top  = Math.random() * (box.clientHeight - noBtn.offsetHeight) + "px";
+function moveNo(){
+    noBtn.style.left =
+        Math.random() * (buttons.clientWidth - noBtn.offsetWidth) + "px";
+    noBtn.style.top =
+        Math.random() * (buttons.clientHeight - noBtn.offsetHeight) + "px";
 }
 moveNo();
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-/* YES click */
+/* YES click (audio guaranteed) */
 yesBtn.onclick = () => {
+    // 🔊 Play music (browser-safe)
+    music.volume = 0.7;
+    music.play().catch(()=>{});
+
+    // remove UI
     buttons.remove();
     question.remove();
     openingGif.remove();
 
-    // 💥 Heart burst first
+    // 💥 hearts first
     heartBurst();
 
-    // Show final gif
+    // show final GIF + message
     setTimeout(() => {
         finalGif.style.display = "block";
         msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
     }, 700);
 };
 
-/* 💕 Background hearts */
+/* 💕 background hearts */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -199,18 +199,18 @@ setInterval(() => {
     setTimeout(() => h.remove(), 6000);
 }, 350);
 
-/* 🩷 Heart burst */
-function heartBurst() {
-    for (let i = 0; i < 30; i++) {
-        const b = document.createElement("div");
-        b.className = "burst";
-        b.innerHTML = "🩷";
-        b.style.left = "50vw";
-        b.style.top = "50vh";
-        b.style.setProperty("--x", (Math.random() * 400 - 200) + "px");
-        b.style.setProperty("--y", (Math.random() * 400 - 200) + "px");
+/* 🩷 heart burst */
+function heartBurst(){
+    for(let i=0;i<30;i++){
+        const b=document.createElement("div");
+        b.className="burst";
+        b.innerHTML="🩷";
+        b.style.left="50vw";
+        b.style.top="50vh";
+        b.style.setProperty("--x",(Math.random()*400-200)+"px");
+        b.style.setProperty("--y",(Math.random()*400-200)+"px");
         document.body.appendChild(b);
-        setTimeout(() => b.remove(), 1000);
+        setTimeout(()=>b.remove(),1000);
     }
 }
 </script>
