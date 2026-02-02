@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine Kitty 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+/* Heart rain */
+.heart {
+    position: fixed;
+    top: -10px;
+    color: #ff3366;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    text-align: center;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    color: #e6005c;
+}
+
+/* Panda */
+.panda {
+    font-size: 90px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.panda.cry {
+    animation: shake 0.4s infinite;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
+
+.tears {
+    font-size: 20px;
+    display: none;
+}
+
+.buttons {
+    margin-top: 20px;
+    position: relative;
+    height: 130px;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+#yes {
+    background: #ff3366;
+    color: white;
+}
+
+#no {
+    background: #aaa;
+    color: white;
+    position: absolute;
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 22px;
+    color: #e6005c;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="panda" id="panda">🐼</div>
+    <div class="tears" id="tears">💧💧</div>
+
+    <h1>Will you be My Valentine, Kitty? 💘</h1>
+
+    <div class="buttons">
+        <button id="yes">Yes 💖</button>
+        <button id="no">No 😭</button>
+    </div>
+
+    <div class="message" id="msg"></div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const panda = document.getElementById("panda");
+const tears = document.getElementById("tears");
+const yesBtn = document.getElementById("yes");
+const msg = document.getElementById("msg");
+
+// Move NO button
+function moveNo() {
+    const box = document.querySelector(".buttons");
+    const maxX = box.clientWidth - noBtn.offsetWidth;
+    const maxY = box.clientHeight - noBtn.offsetHeight;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+
+    panda.classList.add("cry");
+    tears.style.display = "block";
+
+    setTimeout(() => {
+        panda.classList.remove("cry");
+        tears.style.display = "none";
+    }, 800);
+}
+
+moveNo();
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+// YES click
+yesBtn.addEventListener("click", () => {
+    msg.innerHTML = "YAYYY!! 🥹💖 Panda is happy forever!";
+    panda.textContent = "🐼💕";
+    noBtn.style.display = "none";
+    yesBtn.style.display = "none";
+});
+
+// Heart rain
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}
+setInterval(createHeart, 300);
+</script>
+
+</body>
+</html>
