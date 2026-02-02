@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Be My Valentine Kitty 💖</title>
+<title>Be My Valentine Kitty Cheeja 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,13 +17,13 @@ body {
     overflow: hidden;
 }
 
-/* Heart rain */
+/* 💕 Background Heart Rain */
 .heart {
     position: fixed;
     top: -10px;
-    color: #ff3366;
-    font-size: 20px;
+    font-size: 22px;
     animation: fall linear infinite;
+    pointer-events: none;
 }
 
 @keyframes fall {
@@ -33,50 +33,108 @@ body {
     }
 }
 
+/* Container */
 .container {
     background: white;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    padding: 32px;
+    border-radius: 28px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
     text-align: center;
     width: 90%;
     max-width: 420px;
-    position: relative;
     z-index: 2;
 }
 
-h1 {
-    color: #e6005c;
-}
-
-/* Panda */
+/* 🐼 Panda */
 .panda {
-    font-size: 90px;
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    position: relative;
+    border: 4px solid #000;
     animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
     0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
 }
 
-.panda.cry {
-    animation: shake 0.4s infinite;
+/* Panda parts */
+.ear {
+    width: 40px;
+    height: 40px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px;
+}
+.ear.left { left: 5px; }
+.ear.right { right: 5px; }
+
+.eye {
+    width: 25px;
+    height: 30px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 40px;
+}
+.eye.left { left: 28px; }
+.eye.right { right: 28px; }
+.eye::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 6px;
+    left: 6px;
 }
 
+.nose {
+    width: 12px;
+    height: 8px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.blush {
+    width: 14px;
+    height: 8px;
+    background: pink;
+    border-radius: 50%;
+    position: absolute;
+    top: 75px;
+}
+.blush.left { left: 20px; }
+.blush.right { right: 20px; }
+
+/* Cry */
+.cry { animation: shake 0.3s infinite; }
 @keyframes shake {
     0% { transform: translateX(0); }
-    25% { transform: translateX(-3px); }
-    50% { transform: translateX(3px); }
-    75% { transform: translateX(-3px); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
     100% { transform: translateX(0); }
 }
+.tears { display: none; font-size: 20px; }
 
-.tears {
-    font-size: 20px;
-    display: none;
+/* Text */
+h1 {
+    color: #e6005c;
+    margin-bottom: 18px;
 }
 
+/* Buttons */
 .buttons {
     margin-top: 20px;
     position: relative;
@@ -84,16 +142,23 @@ h1 {
 }
 
 button {
-    padding: 12px 30px;
+    padding: 14px 36px;
     font-size: 18px;
-    border-radius: 30px;
+    border-radius: 999px; /* professional pill shape */
     border: none;
     cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:active {
+    transform: scale(0.96);
 }
 
 #yes {
-    background: #ff3366;
+    background: linear-gradient(135deg, #ff3366, #ff5f8f);
     color: white;
+    box-shadow: 0 6px 18px rgba(255,51,102,0.4);
 }
 
 #no {
@@ -103,10 +168,29 @@ button {
 }
 
 .message {
-    margin-top: 20px;
+    margin-top: 22px;
     font-size: 22px;
     color: #e6005c;
     font-weight: bold;
+}
+
+/* 🩷 Heart Burst */
+.burst {
+    position: fixed;
+    font-size: 26px;
+    animation: burst 1s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes burst {
+    from {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+    }
 }
 </style>
 </head>
@@ -114,10 +198,19 @@ button {
 <body>
 
 <div class="container">
-    <div class="panda" id="panda">🐼</div>
+    <div class="panda" id="panda">
+        <div class="ear left"></div>
+        <div class="ear right"></div>
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="nose"></div>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+    </div>
+
     <div class="tears" id="tears">💧💧</div>
 
-    <h1>Will you be My Valentine, Kitty? 💘</h1>
+    <h1>Will you be my Valentine Kitty Cheeja? !! 💘</h1>
 
     <div class="buttons">
         <button id="yes">Yes 💖</button>
@@ -134,7 +227,7 @@ const tears = document.getElementById("tears");
 const yesBtn = document.getElementById("yes");
 const msg = document.getElementById("msg");
 
-// Move NO button
+/* Move NO */
 function moveNo() {
     const box = document.querySelector(".buttons");
     const maxX = box.clientWidth - noBtn.offsetWidth;
@@ -145,37 +238,49 @@ function moveNo() {
 
     panda.classList.add("cry");
     tears.style.display = "block";
-
     setTimeout(() => {
         panda.classList.remove("cry");
         tears.style.display = "none";
     }, 800);
 }
-
 moveNo();
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-// YES click
+/* YES click */
 yesBtn.addEventListener("click", () => {
-    msg.innerHTML = "YAYYY!! 🥹💖 Panda is happy forever!";
-    panda.textContent = "🐼💕";
+    msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
     noBtn.style.display = "none";
     yesBtn.style.display = "none";
+    heartBurst();
 });
 
-// Heart rain
+/* 💕 Background rain */
 function createHeart() {
     const heart = document.createElement("div");
     heart.className = "heart";
-    heart.innerHTML = "💖";
+    heart.innerHTML = "💕";
     heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
     document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 5000);
+    setTimeout(() => heart.remove(), 6000);
 }
-setInterval(createHeart, 300);
+setInterval(createHeart, 350);
+
+/* 🩷 Heart burst */
+function heartBurst() {
+    for (let i = 0; i < 30; i++) {
+        const h = document.createElement("div");
+        h.className = "burst";
+        h.innerHTML = "🩷";
+        h.style.left = "50vw";
+        h.style.top = "50vh";
+        h.style.setProperty("--x", (Math.random()*400 - 200) + "px");
+        h.style.setProperty("--y", (Math.random()*400 - 200) + "px");
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1000);
+    }
+}
 </script>
 
 </body>
