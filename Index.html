@@ -1,9 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Be My Valentine Sriju 🩷🐼!!!</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Romantic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
@@ -15,7 +19,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    font-family:"Segoe UI",sans-serif;
+    font-family:'Dancing Script', cursive;
     overflow:hidden;
 }
 
@@ -46,21 +50,24 @@ body{
 
 /* GIFs */
 .gif{
-    width:180px;
-    display:block;
+    width:190px;
     margin:0 auto 16px;
+    display:block;
+    opacity:1;
+    transition:opacity .6s ease;
 }
 .final-gif{
     width:300px;
     display:none;
     margin:0 auto;
+    transition:opacity .6s ease;
 }
 
 /* Text */
 h1{
     color:#e6005c;
     margin:10px 0 18px;
-    font-size:24px;
+    font-size:28px;
 }
 
 /* Buttons */
@@ -71,11 +78,11 @@ h1{
 }
 button{
     padding:14px 38px;
-    font-size:18px;
+    font-size:20px;
     border-radius:999px;
     border:none;
     cursor:pointer;
-    font-weight:600;
+    font-family:'Dancing Script', cursive;
 }
 #yes{
     background:linear-gradient(135deg,#ff3366,#ff5f8f);
@@ -93,9 +100,9 @@ button{
     bottom:18px;
     left:0;
     right:0;
-    font-size:22px;
+    font-size:26px;
     color:#e6005c;
-    font-weight:bold;
+    font-weight:700;
 }
 
 /* 🩷 Heart burst */
@@ -116,90 +123,111 @@ button{
 
 <body>
 
-<!-- 🎵 Audio (local file, loops forever) -->
-<audio
-    id="bgMusic"
-    src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3"
-    preload="auto"
-    loop>
-</audio>
+<!-- 🎵 Audio -->
+<audio id="bgMusic" src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3" preload="auto" loop></audio>
 
 <div class="container">
 
     <!-- Opening GIF -->
-    <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif" alt="Opening">
+    <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif">
 
-    <!-- Question -->
-    <h1 id="question">Will you be my Valentine Kitty Cheeja? !! 💘</h1>
+    <h1 id="question">Will you be my Valentine Kitty Cheeja? 💘</h1>
 
-    <!-- Buttons -->
     <div class="buttons" id="buttons">
         <button id="yes">Yes 💖</button>
         <button id="no">No 😭</button>
     </div>
 
     <!-- Final GIF -->
-    <img id="finalGif" class="final-gif" src="dudu-bubu.gif" alt="Final">
+    <img id="finalGif" class="final-gif" src="dudu-bubu.gif">
 
-    <!-- Bottom message -->
     <div class="message" id="msg"></div>
-
 </div>
 
 <script>
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const msg = document.getElementById("msg");
-const openingGif = document.getElementById("openingGif");
-const finalGif = document.getElementById("finalGif");
-const question = document.getElementById("question");
-const buttons = document.getElementById("buttons");
-const music = document.getElementById("bgMusic");
+const openingGif=document.getElementById("openingGif");
+const finalGif=document.getElementById("finalGif");
+const yesBtn=document.getElementById("yes");
+const noBtn=document.getElementById("no");
+const buttons=document.getElementById("buttons");
+const question=document.getElementById("question");
+const msg=document.getElementById("msg");
+const music=document.getElementById("bgMusic");
 
-/* Move NO button */
+/* GIF lists */
+const beforeGifs=[
+    "bubu-dudu-sseeyall.gif",
+    "bubu-dudu-sseeyall (1).gif"
+];
+const afterGifs=[
+    "dudu-bubu.gif",
+    "bubu-dudu-heart.gif"
+];
+
+let beforeIndex=0;
+let afterIndex=0;
+let beforeInterval, afterInterval;
+
+/* GIF swap with fade */
+function swapGif(img, list, indexRef){
+    img.style.opacity=0;
+    setTimeout(()=>{
+        img.src=list[indexRef.value];
+        img.style.opacity=1;
+        indexRef.value=(indexRef.value+1)%list.length;
+    },600);
+}
+
+/* Start BEFORE rotation */
+beforeInterval=setInterval(()=>{
+    swapGif(openingGif,beforeGifs,{value:beforeIndex});
+    beforeIndex=(beforeIndex+1)%beforeGifs.length;
+},2000);
+
+/* NO button */
 function moveNo(){
-    noBtn.style.left =
-        Math.random() * (buttons.clientWidth - noBtn.offsetWidth) + "px";
-    noBtn.style.top =
-        Math.random() * (buttons.clientHeight - noBtn.offsetHeight) + "px";
+    noBtn.style.left=Math.random()*(buttons.clientWidth-noBtn.offsetWidth)+"px";
+    noBtn.style.top=Math.random()*(buttons.clientHeight-noBtn.offsetHeight)+"px";
 }
 moveNo();
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
 
-/* YES click (audio guaranteed) */
-yesBtn.onclick = () => {
-    // 🔊 Play music (browser-safe)
-    music.volume = 0.7;
+/* YES click */
+yesBtn.onclick=()=>{
+    music.volume=0.7;
     music.play().catch(()=>{});
 
-    // remove UI
+    clearInterval(beforeInterval);
+    openingGif.remove();
     buttons.remove();
     question.remove();
-    openingGif.remove();
 
-    // 💥 hearts first
     heartBurst();
 
-    // show final GIF + message
-    setTimeout(() => {
-        finalGif.style.display = "block";
-        msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
-    }, 700);
+    setTimeout(()=>{
+        finalGif.style.display="block";
+        msg.innerHTML="Awwww That’s Sweet !! 💕🥹";
+
+        afterInterval=setInterval(()=>{
+            swapGif(finalGif,afterGifs,{value:afterIndex});
+            afterIndex=(afterIndex+1)%afterGifs.length;
+        },2000);
+    },700);
 };
 
-/* 💕 background hearts */
-setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "💕";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = (3 + Math.random() * 3) + "s";
+/* Background hearts */
+setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💕";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(3+Math.random()*3)+"s";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-}, 350);
+    setTimeout(()=>h.remove(),6000);
+},350);
 
-/* 🩷 heart burst */
+/* Heart burst */
 function heartBurst(){
     for(let i=0;i<30;i++){
         const b=document.createElement("div");
