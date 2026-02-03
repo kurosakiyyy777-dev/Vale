@@ -12,7 +12,7 @@
 
 body{
     margin:0;
-    height:100vh;
+    min-height:100vh;
     background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
     display:flex;
     justify-content:center;
@@ -21,11 +21,11 @@ body{
     overflow:hidden;
 }
 
-/* 💕 Heart rain */
+/* 💕 Background hearts */
 .heart{
     position:fixed;
     top:-10px;
-    font-size:22px;
+    font-size:20px;
     animation:fall linear infinite;
     pointer-events:none;
 }
@@ -36,51 +36,56 @@ body{
 /* Card */
 .container{
     background:#fff;
-    padding:28px;
+    padding:24px 20px 64px;
     border-radius:26px;
-    box-shadow:0 18px 40px rgba(0,0,0,.25);
+    box-shadow:0 18px 40px rgba(0,0,0,.22);
     text-align:center;
-    width:90%;
-    max-width:420px;
-    min-height:520px;
+    width:min(92vw,420px);
+    min-height:540px;
     position:relative;
+}
+
+/* GIF wrapper – fixed height = no jump */
+.gif-wrap{
+    height:260px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 /* GIFs */
 .gif{
-    width:190px;
-    margin:0 auto 16px;
-    display:block;
+    width:clamp(180px,45vw,210px);
     opacity:1;
     transition:opacity .6s ease;
 }
 .final-gif{
-    width:300px;
-    display:none;
-    margin:0 auto;
+    width:clamp(250px,65vw,340px);
+    opacity:0;
     transition:opacity .6s ease;
 }
 
 /* Text */
 h1{
     color:#e6005c;
-    margin:10px 0 18px;
-    font-size:28px;
+    margin:12px 0 16px;
+    font-size:clamp(24px,5vw,30px);
 }
 
 /* Buttons */
 .buttons{
-    margin-top:20px;
+    margin-top:16px;
     position:relative;
-    height:130px;
+    height:120px;
 }
 button{
     padding:14px 38px;
-    font-size:20px;
+    font-size:22px;
     border-radius:999px;
     border:none;
     cursor:pointer;
-    font-family:'Dancing Script', cursive;
+    font-family:inherit;
+    transition:transform .25s ease;
 }
 #yes{
     background:linear-gradient(135deg,#ff3366,#ff5f8f);
@@ -98,7 +103,7 @@ button{
     bottom:18px;
     left:0;
     right:0;
-    font-size:26px;
+    font-size:clamp(22px,5vw,26px);
     color:#e6005c;
     font-weight:700;
 }
@@ -121,22 +126,24 @@ button{
 
 <body>
 
-<audio id="bgMusic" src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3" preload="auto" loop></audio>
+<audio id="bgMusic"
+       src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3"
+       preload="auto"
+       loop></audio>
 
 <div class="container">
 
-    <!-- Opening GIF -->
-    <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif">
+    <div class="gif-wrap">
+        <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif">
+        <img id="finalGif" class="final-gif" src="dudu-bubu.gif">
+    </div>
 
-    <h1 id="question">Will you be my Valentine Kitty Cheeja? 💘</h1>
+    <h1 id="question">Will you be my Valentine Sriju? 🩷🐼</h1>
 
     <div class="buttons" id="buttons">
         <button id="yes">Yes 💖</button>
         <button id="no">No 😭</button>
     </div>
-
-    <!-- Final GIF -->
-    <img id="finalGif" class="final-gif" src="dudu-bubu.gif">
 
     <div class="message" id="msg"></div>
 </div>
@@ -151,39 +158,54 @@ const question=document.getElementById("question");
 const msg=document.getElementById("msg");
 const music=document.getElementById("bgMusic");
 
-/* ✅ FIXED GIF ORDER */
+/* 🔒 STRICT GIF ORDER */
 const beforeGifs=[
     "bubu-dudu-sseeyall.gif",
-    "bubu-dudu-heart.gif"          // BEFORE YES
+    "bubu-dudu-heart.gif"
 ];
-
 const afterGifs=[
     "dudu-bubu.gif",
-    "bubu-dudu-sseeyall (1).gif"   // AFTER YES
+    "bubu-dudu-sseeyall (1).gif"
 ];
 
-let beforeIndex=0;
-let afterIndex=0;
-let beforeInterval, afterInterval;
+let beforeIndex=0, afterIndex=0;
+let beforeTimer, afterTimer;
 
-function swapGif(img,list){
+/* Button scale control */
+let yesScale=1;
+let noScale=1;
+
+/* Cross-fade */
+function crossFade(img,src){
     img.style.opacity=0;
     setTimeout(()=>{
-        img.src=list.shift();
-        list.push(img.src);
+        img.src=src;
         img.style.opacity=1;
-    },600);
+    },300);
 }
 
-/* Rotate BEFORE YES */
-beforeInterval=setInterval(()=>{
-    swapGif(openingGif,beforeGifs);
+/* BEFORE YES loop */
+beforeTimer=setInterval(()=>{
+    beforeIndex=(beforeIndex+1)%beforeGifs.length;
+    crossFade(openingGif,beforeGifs[beforeIndex]);
 },2000);
 
-/* NO button */
+/* NO button logic */
 function moveNo(){
     noBtn.style.left=Math.random()*(buttons.clientWidth-noBtn.offsetWidth)+"px";
     noBtn.style.top=Math.random()*(buttons.clientHeight-noBtn.offsetHeight)+"px";
+
+    /* YES grows */
+    if(yesScale<1.5){
+        yesScale+=0.05;
+        yesBtn.style.transform=`scale(${yesScale})`;
+    }
+
+    /* NO shrinks */
+    if(noScale>0.6){
+        noScale-=0.05;
+        noBtn.style.transform=`scale(${noScale})`;
+    }
 }
 moveNo();
 noBtn.addEventListener("mouseenter",moveNo);
@@ -194,19 +216,21 @@ yesBtn.onclick=()=>{
     music.volume=0.7;
     music.play().catch(()=>{});
 
-    clearInterval(beforeInterval);
-    openingGif.remove();
+    clearInterval(beforeTimer);
+
+    openingGif.style.display="none";
     buttons.remove();
     question.remove();
 
     heartBurst();
 
     setTimeout(()=>{
-        finalGif.style.display="block";
+        finalGif.style.opacity=1;
         msg.innerHTML="Awwww That’s Sweet !! 💕🥹";
 
-        afterInterval=setInterval(()=>{
-            swapGif(finalGif,afterGifs);
+        afterTimer=setInterval(()=>{
+            afterIndex=(afterIndex+1)%afterGifs.length;
+            crossFade(finalGif,afterGifs[afterIndex]);
         },2000);
     },700);
 };
@@ -220,7 +244,7 @@ setInterval(()=>{
     h.style.animationDuration=(3+Math.random()*3)+"s";
     document.body.appendChild(h);
     setTimeout(()=>h.remove(),6000);
-},350);
+},380);
 
 /* Heart burst */
 function heartBurst(){
