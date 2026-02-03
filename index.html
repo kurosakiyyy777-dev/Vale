@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,117 +8,112 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Dancing Script', cursive;
-    overflow: hidden;
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Dancing Script', cursive;
+    overflow:hidden;
 }
 
-/* 💕 Background hearts */
-.heart {
-    position: fixed;
-    top: -10px;
-    font-size: 20px;
-    animation: fall linear infinite;
-    pointer-events: none;
+/* 💕 Heart rain */
+.heart{
+    position:fixed;
+    top:-10px;
+    font-size:22px;
+    animation:fall linear infinite;
+    pointer-events:none;
 }
-@keyframes fall {
-    to { transform: translateY(110vh); opacity: 0; }
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0}
 }
 
 /* Card */
-.container {
-    background: #fff;
-    padding: 22px 20px 60px;
-    border-radius: 26px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
-    text-align: center;
-    width: min(92vw, 420px);
-    min-height: 520px;
-    position: relative;
-}
-
-/* GIF wrapper (prevents layout jump) */
-.gif-wrap {
-    width: 100%;
-    height: 240px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container{
+    background:#fff;
+    padding:28px;
+    border-radius:26px;
+    box-shadow:0 18px 40px rgba(0,0,0,.25);
+    text-align:center;
+    width:90%;
+    max-width:420px;
+    min-height:520px;
+    position:relative;
 }
 
 /* GIFs */
-.gif {
-    width: clamp(170px, 45vw, 200px);
-    opacity: 1;
-    transition: opacity .6s ease;
+.gif{
+    width:190px;
+    margin:0 auto 16px;
+    display:block;
+    opacity:1;
+    transition:opacity .6s ease;
 }
-.final-gif {
-    width: clamp(230px, 60vw, 320px);
-    opacity: 0;
-    transition: opacity .6s ease;
+.final-gif{
+    width:300px;
+    display:none;
+    margin:0 auto;
+    transition:opacity .6s ease;
 }
 
 /* Text */
-h1 {
-    color: #e6005c;
-    margin: 10px 0 14px;
-    font-size: clamp(24px, 5vw, 30px);
+h1{
+    color:#e6005c;
+    margin:10px 0 18px;
+    font-size:28px;
 }
 
 /* Buttons */
-.buttons {
-    margin-top: 16px;
-    position: relative;
-    height: 120px;
+.buttons{
+    margin-top:20px;
+    position:relative;
+    height:130px;
 }
-button {
-    padding: 12px 34px;
-    font-size: 20px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
+button{
+    padding:14px 38px;
+    font-size:20px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    font-family:'Dancing Script', cursive;
 }
-#yes {
-    background: linear-gradient(135deg, #ff3366, #ff5f8f);
-    color: #fff;
+#yes{
+    background:linear-gradient(135deg,#ff3366,#ff5f8f);
+    color:#fff;
 }
-#no {
-    background: #aaa;
-    color: #fff;
-    position: absolute;
+#no{
+    background:#aaa;
+    color:#fff;
+    position:absolute;
 }
 
 /* Bottom message */
-.message {
-    position: absolute;
-    bottom: 18px;
-    left: 0;
-    right: 0;
-    font-size: clamp(22px, 5vw, 26px);
-    color: #e6005c;
-    font-weight: 700;
+.message{
+    position:absolute;
+    bottom:18px;
+    left:0;
+    right:0;
+    font-size:26px;
+    color:#e6005c;
+    font-weight:700;
 }
 
 /* 🩷 Heart burst */
-.burst {
-    position: fixed;
-    font-size: 26px;
-    animation: burst 1s ease-out forwards;
-    pointer-events: none;
+.burst{
+    position:fixed;
+    font-size:26px;
+    animation:burst 1s ease-out forwards;
+    pointer-events:none;
 }
-@keyframes burst {
-    to {
-        transform: translate(var(--x), var(--y)) scale(.5);
-        opacity: 0;
+@keyframes burst{
+    to{
+        transform:translate(var(--x),var(--y)) scale(.5);
+        opacity:0;
     }
 }
 </style>
@@ -127,26 +121,12 @@ button {
 
 <body>
 
-<audio id="bgMusic"
-       src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3"
-       preload="auto"
-       loop></audio>
+<audio id="bgMusic" src="illit-not-cute-anymore-sped-up-skysoundcc_NbpmMJEo.mp3" preload="auto" loop></audio>
 
 <div class="container">
 
-    <div class="gif-wrap">
-        <!-- Opening GIF -->
-        <img id="openingGif"
-             class="gif"
-             src="bubu-dudu-sseeyall.gif"
-             alt="Opening gif">
-
-        <!-- Final GIF -->
-        <img id="finalGif"
-             class="final-gif"
-             src="dudu-bubu.gif"
-             alt="Final gif">
-    </div>
+    <!-- Opening GIF -->
+    <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif">
 
     <h1 id="question">Will you be my Valentine Kitty Cheeja? 💘</h1>
 
@@ -155,106 +135,105 @@ button {
         <button id="no">No 😭</button>
     </div>
 
+    <!-- Final GIF -->
+    <img id="finalGif" class="final-gif" src="dudu-bubu.gif">
+
     <div class="message" id="msg"></div>
 </div>
 
 <script>
-const openingGif = document.getElementById("openingGif");
-const finalGif   = document.getElementById("finalGif");
-const yesBtn     = document.getElementById("yes");
-const noBtn      = document.getElementById("no");
-const buttons    = document.getElementById("buttons");
-const question   = document.getElementById("question");
-const msg        = document.getElementById("msg");
-const music      = document.getElementById("bgMusic");
+const openingGif=document.getElementById("openingGif");
+const finalGif=document.getElementById("finalGif");
+const yesBtn=document.getElementById("yes");
+const noBtn=document.getElementById("no");
+const buttons=document.getElementById("buttons");
+const question=document.getElementById("question");
+const msg=document.getElementById("msg");
+const music=document.getElementById("bgMusic");
 
-/* 🔒 FIXED GIF ORDER (NO RANDOM) */
-const beforeGifs = [
+/* ✅ FIXED GIF ORDER */
+const beforeGifs=[
     "bubu-dudu-sseeyall.gif",
-    "bubu-dudu-heart.gif"
+    "bubu-dudu-heart.gif"          // BEFORE YES
 ];
-const afterGifs = [
+
+const afterGifs=[
     "dudu-bubu.gif",
-    "bubu-dudu-sseeyall (1).gif"
+    "bubu-dudu-sseeyall (1).gif"   // AFTER YES
 ];
 
-let beforeIndex = 0;
-let afterIndex = 0;
-let beforeTimer, afterTimer;
+let beforeIndex=0;
+let afterIndex=0;
+let beforeInterval, afterInterval;
 
-/* Cross-fade swap */
-function crossFade(img, src) {
-    img.style.opacity = 0;
-    setTimeout(() => {
-        img.src = src;
-        img.style.opacity = 1;
-    }, 300);
+function swapGif(img,list){
+    img.style.opacity=0;
+    setTimeout(()=>{
+        img.src=list.shift();
+        list.push(img.src);
+        img.style.opacity=1;
+    },600);
 }
 
-/* BEFORE YES rotation */
-beforeTimer = setInterval(() => {
-    beforeIndex = (beforeIndex + 1) % beforeGifs.length;
-    crossFade(openingGif, beforeGifs[beforeIndex]);
-}, 2000);
+/* Rotate BEFORE YES */
+beforeInterval=setInterval(()=>{
+    swapGif(openingGif,beforeGifs);
+},2000);
 
-/* NO button movement */
-function moveNo() {
-    noBtn.style.left =
-        Math.random() * (buttons.clientWidth - noBtn.offsetWidth) + "px";
-    noBtn.style.top =
-        Math.random() * (buttons.clientHeight - noBtn.offsetHeight) + "px";
+/* NO button */
+function moveNo(){
+    noBtn.style.left=Math.random()*(buttons.clientWidth-noBtn.offsetWidth)+"px";
+    noBtn.style.top=Math.random()*(buttons.clientHeight-noBtn.offsetHeight)+"px";
 }
 moveNo();
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
 
 /* YES click */
-yesBtn.onclick = () => {
-    music.volume = 0.7;
+yesBtn.onclick=()=>{
+    music.volume=0.7;
     music.play().catch(()=>{});
 
-    clearInterval(beforeTimer);
-
-    openingGif.style.display = "none";
+    clearInterval(beforeInterval);
+    openingGif.remove();
     buttons.remove();
     question.remove();
 
     heartBurst();
 
-    setTimeout(() => {
-        finalGif.style.opacity = 1;
-        msg.innerHTML = "Awwww That’s Sweet !! 💕🥹";
+    setTimeout(()=>{
+        finalGif.style.display="block";
+        msg.innerHTML="Awwww That’s Sweet !! 💕🥹";
 
-        afterTimer = setInterval(() => {
-            afterIndex = (afterIndex + 1) % afterGifs.length;
-            crossFade(finalGif, afterGifs[afterIndex]);
-        }, 2000);
-    }, 700);
+        afterInterval=setInterval(()=>{
+            swapGif(finalGif,afterGifs);
+        },2000);
+    },700);
 };
 
 /* Background hearts */
-setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "💕";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = (3 + Math.random() * 3) + "s";
+setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💕";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(3+Math.random()*3)+"s";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-}, 380);
+    setTimeout(()=>h.remove(),6000);
+},350);
 
 /* Heart burst */
-function heartBurst() {
-    for (let i = 0; i < 30; i++) {
-        const b = document.createElement("div");
-        b.className = "burst";
-        b.innerHTML = "🩷";
-        b.style.left = "50vw";
-        b.style.top = "50vh";
-        b.style.setProperty("--x", (Math.random()*400 - 200) + "px");
-        b.style.setProperty("--y", (Math.random()*400 - 200) + "px");
+function heartBurst(){
+    for(let i=0;i<30;i++){
+        const b=document.createElement("div");
+        b.className="burst";
+        b.innerHTML="🩷";
+        b.style.left="50vw";
+        b.style.top="50vh";
+        b.style.setProperty("--x",(Math.random()*400-200)+"px");
+        b.style.setProperty("--y",(Math.random()*400-200)+"px");
         document.body.appendChild(b);
-        setTimeout(() => b.remove(), 1000);
+        setTimeout(()=>b.remove(),1000);
     }
 }
 </script>
