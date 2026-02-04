@@ -45,13 +45,12 @@ body{
     position:relative;
 }
 
-/* GIF area */
+/* GIF area – centered perfectly */
 .gif-wrap{
     height:260px;
     display:flex;
     justify-content:center;
     align-items:center;
-    flex-direction:column;
 }
 
 /* GIFs */
@@ -65,7 +64,7 @@ body{
     transition:opacity .6s ease;
 }
 
-/* Message below GIF (after YES) */
+/* Message */
 .message{
     margin-top:12px;
     font-size:clamp(22px,5vw,26px);
@@ -84,7 +83,7 @@ h1{
 .buttons{
     margin-top:12px;
     position:relative;
-    height:130px;
+    height:150px;
 }
 button{
     padding:14px 38px;
@@ -93,27 +92,25 @@ button{
     border:none;
     cursor:pointer;
     font-family:inherit;
-    transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1);
 }
 
 #yes{
     background:linear-gradient(135deg,#ff3366,#ff5f8f);
     color:#fff;
-    transform:scale(1);
 }
 
 #no{
     background:#aaa;
     color:#fff;
     position:absolute;
-    transform:scale(1);
 }
 
 /* Subtitle */
 .subtitle{
     margin-top:12px;
     font-size:21px;
-    color:#ff0033; /* vibrant red */
+    color:#ff0033;
     opacity:0;
     transform:scale(.6);
     transition:opacity .3s ease, transform .3s ease;
@@ -151,7 +148,6 @@ button{
     <div class="gif-wrap">
         <img id="openingGif" class="gif" src="bubu-dudu-sseeyall.gif">
         <img id="finalGif" class="final-gif" src="dudu-bubu.gif">
-        <div class="message" id="msg"></div>
     </div>
 
     <h1 id="question">Will You Be My Valentine Kitty Cheeja?! 💌💝</h1>
@@ -162,6 +158,7 @@ button{
     </div>
 
     <div class="subtitle" id="subtitle">hehehe 👉👈 ♥️</div>
+    <div class="message" id="msg"></div>
 </div>
 
 <script>
@@ -170,8 +167,8 @@ const finalGif=document.getElementById("finalGif");
 const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
 const buttons=document.getElementById("buttons");
-const question=document.getElementById("question");
 const subtitle=document.getElementById("subtitle");
+const question=document.getElementById("question");
 const msg=document.getElementById("msg");
 const music=document.getElementById("bgMusic");
 
@@ -181,7 +178,11 @@ const afterGifs=["dudu-bubu.gif","bubu-dudu-sseeyall (1).gif"];
 
 let beforeIndex=0, afterIndex=0;
 let beforeTimer, afterTimer;
-let yesScale=1, noScale=1, noClicks=0;
+
+/* Button states */
+let yesScale=1;
+let noScale=1;
+let noCount=0;
 
 /* Crossfade */
 function crossFade(img,src){
@@ -192,32 +193,61 @@ function crossFade(img,src){
     },300);
 }
 
-/* Before YES loop */
+/* Before YES GIF loop */
 beforeTimer=setInterval(()=>{
     beforeIndex=(beforeIndex+1)%beforeGifs.length;
     crossFade(openingGif,beforeGifs[beforeIndex]);
 },2000);
 
-/* NO logic */
+/* NO movement logic (1:2 ratio) */
 function moveNo(){
-    noClicks++;
+    const box=buttons.getBoundingClientRect();
+    const yesBox=yesBtn.getBoundingClientRect();
+    noCount++;
 
-    noBtn.style.left=Math.random()*(buttons.clientWidth-noBtn.offsetWidth)+"px";
-    noBtn.style.top=Math.random()*(buttons.clientHeight-noBtn.offsetHeight)+"px";
+    let x,y;
 
-    yesScale*=1.25;
-    yesBtn.style.transform=`scale(${yesScale})`;
+    if(noCount % 3 === 0){
+        /* Near YES (almost overlapping) */
+        x = yesBox.left - box.left + yesBox.width/2 - noBtn.offsetWidth/2;
+        y = yesBox.top  - box.top  + yesBox.height/2 - noBtn.offsetHeight/2;
+        x += Math.random()*20 - 10;
+        y += Math.random()*20 - 10;
+    }else{
+        /* Far random */
+        x = Math.random()*(box.width-noBtn.offsetWidth);
+        y = Math.random()*(box.height-noBtn.offsetHeight);
+    }
 
-    noScale*=0.9;
-    noBtn.style.transform=`scale(${noScale})`;
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top  = `${y}px`;
 
-    if(noClicks%2===0){
+    /* YES grows */
+    yesScale *= 1.25;
+    yesBtn.style.transform = `scale(${yesScale})`;
+
+    /* NO shrinks */
+    noScale *= 0.9;
+    noBtn.style.transform = `scale(${noScale})`;
+
+    /* Subtitle every 2 NOs */
+    if(noCount % 2 === 0){
         subtitle.classList.add("show");
         setTimeout(()=>subtitle.classList.remove("show"),1200);
     }
 }
 
-moveNo();
+/* Desktop proximity detection */
+document.addEventListener("mousemove",(e)=>{
+    const rect=noBtn.getBoundingClientRect();
+    const dx=e.clientX-(rect.left+rect.width/2);
+    const dy=e.clientY-(rect.top+rect.height/2);
+    if(Math.sqrt(dx*dx+dy*dy)<80){
+        moveNo();
+    }
+});
+
+/* Hover / mobile */
 noBtn.addEventListener("mouseenter",moveNo);
 noBtn.addEventListener("touchstart",moveNo);
 
